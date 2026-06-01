@@ -12,8 +12,8 @@
             --warna-bunga: #dfc7be; 
             --putih-hangat: #fdfdfb;
             --teks-lembut: #5a6e5d;
-            --bayangan-halus: 0 20px 50px rgba(62, 78, 62, 0.05);
-            --bayangan-3d: 0 30px 60px rgba(30, 45, 30, 0.12);
+            --bayangan-halus: 0 15px 35px rgba(62, 78, 62, 0.04);
+            --bayangan-3d: 0 25px 50px rgba(30, 45, 30, 0.1);
             
             --krl-soft: #fceecb;
             --krl-dark: #5a4b2c;
@@ -24,9 +24,9 @@
             --tj-soft: #ffdcd9;
             --tj-dark: #5c3b38;
 
-            /* Kurva Animasi Mulus (Tren Web 2026) */
-            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+            /* Kurva Animasi Fun Modern */
+            --bounce-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+            --smooth-fast: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -39,13 +39,13 @@
             background-color: var(--bg-taman);
             color: var(--warna-daun);
             margin: 0;
-            padding: 24px;
+            padding: 20px;
             overflow-x: hidden;
             position: relative;
             min-height: 100vh;
         }
 
-        /* AREA EMOJI PINGGIR BERGERAK LEBIH ALUS */
+        /* AREA BACKGROUND EMOJI - OPTIMASI GPU ANTI-LAG */
         .area-emoji-pinggir {
             position: fixed;
             top: 0;
@@ -59,134 +59,124 @@
 
         .emoji-gerak {
             position: absolute;
-            font-size: 32px;
-            opacity: 0.45;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.06));
+            font-size: 30px;
+            opacity: 0.4;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05));
             will-change: transform;
         }
 
-        @keyframes gerakAlami {
-            0% { transform: translateY(0px) rotate(0deg) scale(1); }
-            33% { transform: translateY(-15px) rotate(5deg) scale(1.05); }
-            66% { transform: translateY(10px) rotate(-5deg) scale(0.95); }
-            100% { transform: translateY(0px) rotate(0deg) scale(1); }
+        @keyframes gerakFun {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate3d(5px, -12px, 0) rotate(7deg) scale(1.08); }
+            66% { transform: translate3d(-5px, 8px, 0) rotate(-7deg) scale(0.92); }
+            100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
         }
 
-        .pos-kiri-1 { top: 12%; left: 4%; animation: gerakAlami 12s ease-in-out infinite; }
-        .pos-kiri-2 { top: 42%; left: 3%; animation: gerakAlami 15s ease-in-out infinite 1s; }
-        .pos-kiri-3 { top: 72%; left: 5%; animation: gerakAlami 14s ease-in-out infinite 2s; }
+        .pos-kiri-1 { top: 12%; left: 4%; animation: gerakFun 9s ease-in-out infinite; }
+        .pos-kiri-2 { top: 44%; left: 3%; animation: gerakFun 11s ease-in-out infinite 0.5s; }
+        .pos-kiri-3 { top: 76%; left: 5%; animation: gerakFun 10s ease-in-out infinite 1s; }
         
-        .pos-kanan-1 { top: 18%; right: 4%; animation: gerakAlami 13s ease-in-out infinite 0.5s; }
-        .pos-kanan-2 { top: 48%; right: 3%; animation: gerakAlami 16s ease-in-out infinite 1.5s; }
-        .pos-kanan-3 { top: 78%; right: 5%; animation: gerakAlami 11s ease-in-out infinite 2.5s; }
+        .pos-kanan-1 { top: 16%; right: 4%; animation: gerakFun 9.5s ease-in-out infinite 0.2s; }
+        .pos-kanan-2 { top: 48%; right: 3%; animation: gerakFun 11.5s ease-in-out infinite 0.7s; }
+        .pos-kanan-3 { top: 80%; right: 5%; animation: gerakFun 8.5s ease-in-out infinite 1.2s; }
 
         @media (max-width: 768px) {
-            .emoji-gerak { font-size: 22px; opacity: 0.35; }
+            body { padding: 16px; }
+            .emoji-gerak { font-size: 20px; opacity: 0.3; }
         }
 
-        /* CONTAINER UTAMA */
+        /* WRAPPER UTAMA */
         .main-wrapper {
-            max-width: 620px;
-            margin: 40px auto;
+            max-width: 600px;
+            margin: 30px auto;
             position: relative;
             z-index: 2;
         }
 
-        /* ANIMASI ENTRANCE (MUNCUL BERURUTAN / STAGGERED) */
+        /* ENTRANCE TRANSITION */
         .anim-fade-up {
             opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUpIn 0.8s var(--ease-smooth) forwards;
+            transform: translate3d(0, 25px, 0);
+            animation: fadeUpIn 0.7s var(--smooth-fast) forwards;
         }
 
         @keyframes fadeUpIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
 
-        /* Set delay berurutan biar estetik pas dibuka */
-        .el-1 { animation-delay: 0.1s; }
-        .el-2 { animation-delay: 0.25s; }
-        .el-3 { animation-delay: 0.4s; }
-        .el-4 { animation-delay: 0.55s; }
-        .el-5 { animation-delay: 0.7s; }
+        .el-1 { animation-delay: 0.05s; }
+        .el-2 { animation-delay: 0.15s; }
+        .el-3 { animation-delay: 0.25s; }
+        .el-4 { animation-delay: 0.35s; }
+        .el-5 { animation-delay: 0.45s; }
 
         .header-teduh {
             background-color: var(--putih-hangat);
-            padding: 45px 20px;
-            border-radius: 32px;
+            padding: 40px 20px;
+            border-radius: 28px;
             text-align: center;
             box-shadow: var(--bayangan-halus);
-            margin-bottom: 24px;
-            border: 1px solid rgba(62, 78, 62, 0.04);
-            transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
-        }
-        .header-teduh:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--bayangan-3d);
+            margin-bottom: 20px;
+            border: 1px solid rgba(62, 78, 62, 0.03);
         }
 
         .header-teduh h1 {
             font-family: 'Poppins', sans-serif;
-            margin: 12px 0 0 0;
-            font-size: 24px;
+            margin: 10px 0 0 0;
+            font-size: 23px;
             color: var(--warna-daun);
             font-weight: 600;
-            letter-spacing: -0.5px;
         }
 
         .icon-tanaman {
-            font-size: 40px;
+            font-size: 36px;
             display: block;
-            animation: float-icon 5s ease-in-out infinite;
+            animation: floatIcon 4s ease-in-out infinite;
         }
 
-        @keyframes float-icon {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(4deg); }
+        @keyframes floatIcon {
+            0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50% { transform: translate3d(0, -6px, 0) rotate(5deg); }
         }
 
         .sub-salam {
             color: var(--teks-lembut);
-            font-size: 13.5px;
-            margin-top: 10px;
+            font-size: 13px;
+            margin-top: 8px;
             font-style: italic;
-            opacity: 0.9;
         }
 
         .grid-lembut {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
         }
 
-        /* KARTU BIODATA */
         .kartu-teduh {
             background-color: var(--putih-hangat);
-            border-radius: 28px;
-            padding: 26px;
+            border-radius: 24px;
+            padding: 24px;
             box-shadow: var(--bayangan-halus);
-            border: 1px solid rgba(62, 78, 62, 0.04);
-            transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+            border: 1px solid rgba(62, 78, 62, 0.03);
+            transition: transform 0.3s var(--smooth-fast), box-shadow 0.3s var(--smooth-fast);
         }
         .kartu-teduh:hover {
+            transform: scale(1.01);
             box-shadow: var(--bayangan-3d);
         }
 
         h2.judul-kartu {
             font-family: 'Poppins', sans-serif;
             margin-top: 0;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--warna-daun);
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #f2f5f2;
-            margin-bottom: 16px;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f3f6f3;
+            margin-bottom: 14px;
         }
 
         .info-list {
@@ -199,76 +189,75 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 7px 0;
-            font-size: 14.5px;
+            padding: 6px 0;
+            font-size: 14px;
         }
 
-        .label { color: #708473; }
+        .label { color: #728675; }
 
         .isi {
             font-weight: 600;
             color: var(--warna-daun);
-            background-color: #f4f7f4;
-            padding: 4px 14px;
-            border-radius: 14px;
-            font-size: 14px;
+            background-color: #f3f6f3;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 13.5px;
         }
 
         .badge-container {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 4px;
         }
         
         .badge-lembut {
-            background-color: #f4f7f4;
-            padding: 6px 14px;
-            border-radius: 16px;
-            font-size: 13.5px;
+            background-color: #f3f6f3;
+            padding: 6px 12px;
+            border-radius: 14px;
+            font-size: 13px;
             color: var(--teks-lembut);
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
-            border: 1px solid rgba(62, 78, 62, 0.02);
-            transition: transform 0.4s var(--ease-out-back), box-shadow 0.4s var(--ease-smooth);
+            gap: 5px;
+            border: 1px solid rgba(62, 78, 62, 0.01);
+            transition: transform 0.3s var(--bounce-elastic), box-shadow 0.3s var(--smooth-fast);
         }
 
-        /* BADGE TRANSPORTASI DENGAN MICRO-INTERACTIONS */
         .clickable-transport {
-            cursor: pointer !important;
+            cursor: pointer;
             user-select: none;
         }
         .clickable-transport:hover {
-            transform: translateY(-4px) scale(1.04);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
         }
         .clickable-transport:active {
-            transform: translateY(-1px) scale(0.98);
+            transform: scale(0.95);
         }
 
         .pesan-box {
             background-color: var(--putih-hangat);
-            border-radius: 26px;
-            padding: 28px;
-            margin-top: 24px;
+            border-radius: 24px;
+            padding: 26px;
+            margin-top: 20px;
             box-shadow: var(--bayangan-halus);
-            border: 1px solid rgba(62, 78, 62, 0.04);
-            border-left: 4px solid #bfaea7;
+            border: 1px solid rgba(62, 78, 62, 0.03);
+            border-left: 4px solid #c2b0a9;
         }
 
         .pesan-box p {
             margin: 0;
-            line-height: 1.8;
-            font-size: 14.5px;
+            line-height: 1.75;
+            font-size: 14px;
             color: var(--teks-lembut);
             text-align: justify;
         }
 
         .tanda-tangan {
-            margin-top: 18px;
-            font-size: 13.5px;
+            margin-top: 16px;
+            font-size: 13px;
             color: var(--warna-daun);
             font-weight: 600;
             text-align: right;
@@ -276,64 +265,65 @@
 
         .footer-teduh {
             text-align: center;
-            margin-top: 45px;
-            font-size: 12.5px;
-            color: #92a495;
-            padding-bottom: 30px;
-            letter-spacing: 0.3px;
+            margin-top: 40px;
+            font-size: 12px;
+            color: #9cb0a0;
+            padding-bottom: 20px;
         }
 
+
         /* ==========================================================================
-           MODAL DENGAN TEKNIK TRANSISI POP-UP INTERAKTIF MEMBAL (ELASTIC ZOOM)
+           MODAL INTERAKTIF FUN (PAS DI TENGAH & SCROLL SUPER RINGAN)
            ========================================================================== */
         .modal-overlay {
             position: fixed;
-            inset: 0;
-            background-color: rgba(26, 36, 26, 0);
-            backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(22, 30, 22, 0.55); /* Latar belakang solid-transparan ringan tanpa blur berat */
             z-index: 1000;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            align-items: center;      /* MEMASTIKAN PAS DI TENGAH VERTIKAL */
+            justify-content: center;   /* MEMASTIKAN PAS DI TENGAH HORIZONTAL */
+            padding: 16px;
+            opacity: 0;
             pointer-events: none;
-            /* Transisi hilangnya overlay halus */
-            transition: background-color 0.4s var(--ease-smooth), backdrop-filter 0.4s var(--ease-smooth), -webkit-backdrop-filter 0.4s var(--ease-smooth);
+            transition: opacity 0.35s var(--smooth-fast);
         }
 
         .modal-overlay.active {
+            opacity: 1;
             pointer-events: auto;
-            background-color: rgba(20, 28, 20, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
 
         .modal-window {
             background-color: var(--putih-hangat);
             width: 100%;
-            max-width: 520px;
-            border-radius: 32px;
+            max-width: 460px; /* Ukuran ideal pas genggaman layar smartphone */
+            max-height: 82vh; /* Menjaga modal tidak melebihi batas tinggi layar */
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column; /* Memisahkan header tetap dan body scrollable */
             overflow: hidden;
-            box-shadow: 0 40px 80px rgba(15,25,15,0px);
-            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 30px 60px rgba(10,20,10,0.2);
             opacity: 0;
-            /* Efek Mengecil dan Turun di Awal */
-            transform: translateY(30px) scale(0.92);
-            /* Transisi membal pas masuk, mulus pas keluar */
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15), opacity 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
+            /* Efek Bouncy Elastic Squeeze pas muncul */
+            transform: scale(0.85) translateY(40px);
+            transition: transform 0.5s var(--bounce-elastic), opacity 0.35s var(--smooth-fast);
         }
 
         .modal-overlay.active .modal-window {
             opacity: 1;
-            transform: translateY(0) scale(1);
-            box-shadow: 0 40px 80px rgba(15,25,15,0.22);
+            transform: scale(1) translateY(0);
         }
 
+        /* HEADER BANNER - FIX PROTEKSI TOMBOL CLOSE */
         .modal-banner {
-            padding: 28px 24px;
+            padding: 24px 65px 24px 22px; /* Jarak kanan 65px agar judul tidak pernah menabrak tombol X */
             color: white;
             position: relative;
+            flex-shrink: 0; /* Mencegah header menyusut */
         }
         
         .modal-banner.theme-krl { background: linear-gradient(135deg, #dd1c24, #a30f14); }
@@ -344,20 +334,21 @@
         .modal-banner h3 {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 700;
+            line-height: 1.3;
         }
         .modal-banner p {
             margin: 4px 0 0 0;
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0.85;
         }
 
         .btn-close-modal {
             position: absolute;
-            top: 24px;
-            right: 24px;
-            background: rgba(255,255,255,0.18);
+            top: 22px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             width: 32px;
@@ -368,22 +359,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s, transform 0.2s;
+            transition: background 0.2s, transform 0.2s var(--bounce-elastic);
         }
         .btn-close-modal:hover { 
-            background: rgba(255,255,255,0.3); 
-            transform: scale(1.1);
+            background: rgba(255,255,255,0.35); 
+            transform: scale(1.15) rotate(90deg);
         }
 
-        /* SLIDESHOW SLIDE TRANSISI CROSS-FADE */
+        /* SLIDESHOW AREA - FIX KEBUTUHAN PRESISI TENGAH */
         .slideshow-area {
             position: relative;
-            height: 200px;
-            background: #1e241f;
+            height: 170px;
+            background: #151916;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        #slideVectorContainer {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .vector-slide {
@@ -394,108 +395,120 @@
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.45s var(--ease-smooth), transform 0.45s var(--ease-smooth);
-            padding: 20px;
+            visibility: hidden;
+            transform: translate3d(30px, 0, 0) scale(0.95);
+            transition: opacity 0.35s ease, transform 0.35s var(--smooth-fast), visibility 0.35s;
+            padding: 15px;
         }
+        
         .vector-slide.active {
             opacity: 1;
-            transform: scale(1);
+            visibility: visible;
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
-        /* Tombol Navigasi Slider */
+        .vector-slide.slide-exit-left {
+            opacity: 0;
+            transform: translate3d(-30px, 0, 0) scale(0.95);
+        }
+
+        .vector-slide svg {
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto; /* Memaksa SVG terkunci sempurna di center */
+        }
+
+        /* Navigasi Slide */
         .slide-nav {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255,255,255,0.15);
             color: white;
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.3s, transform 0.2s var(--ease-out-back);
+            transition: background 0.2s, transform 0.2s var(--bounce-elastic);
         }
         .slide-nav:hover { 
             background: rgba(255, 255, 255, 0.25); 
-            transform: translateY(-50%) scale(1.1);
+            transform: translateY(-50%) scale(1.15);
         }
-        .slide-prev { left: 14px; }
-        .slide-next { right: 14px; }
+        .slide-prev { left: 12px; }
+        .slide-next { right: 12px; }
 
         .slide-counter {
             position: absolute;
-            bottom: 12px;
-            right: 14px;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
+            bottom: 10px;
+            right: 12px;
+            background: rgba(0,0,0,0.45);
             color: white;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 8px;
+            font-size: 10.5px;
             font-weight: 600;
         }
 
-        /* BOX TEKS DETAIL MODAL */
+        /* BODY MODAL - OPTIMASI ACCELERATED SCROLLING */
         .modal-body {
-            padding: 24px;
-            max-height: 280px;
+            padding: 22px;
             overflow-y: auto;
+            flex-grow: 1;
+            -webkit-overflow-scrolling: touch; /* Mengaktifkan scrolling inersia bawaan sistem HP biar enteng */
         }
 
         .modal-section-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #8c9e8e;
+            color: #8da090;
             margin-bottom: 6px;
         }
 
         .modal-text {
             font-size: 14px;
-            line-height: 1.7;
+            line-height: 1.65;
             color: var(--teks-lembut);
             text-align: justify;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             margin-top: 0;
         }
 
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            background-color: #f5f8f5;
-            padding: 14px;
-            border-radius: 16px;
+            gap: 10px;
+            background-color: #f4f7f4;
+            padding: 12px;
+            border-radius: 14px;
         }
         .spec-item { display: flex; flex-direction: column; }
-        .spec-lbl { font-size: 11px; color: #8fa392; text-transform: uppercase; }
-        .spec-val { font-size: 13px; font-weight: 700; color: var(--warna-daun); }
+        .spec-lbl { font-size: 10.5px; color: #91a494; text-transform: uppercase; }
+        .spec-val { font-size: 12.5px; font-weight: 700; color: var(--warna-daun); margin-top: 1px; }
 
-        /* PARTICLES BOOM EFFECT */
+        /* EFECT RIPPLE CELEBRATION */
         .click-particle {
             position: fixed;
-            width: 5px;
-            height: 5px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
             will-change: transform, opacity;
-            animation: blowParticle 0.65s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+            animation: particlePop 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
-        @keyframes blowParticle {
-            0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        @keyframes particlePop {
+            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+            100% { transform: translate3d(var(--x), var(--y), 0) scale(0); opacity: 0; }
         }
     </style>
 </head>
@@ -521,7 +534,7 @@
 
         <div class="grid-lembut">
             
-            <div class="kartu-teduh anim-fade-up el-2" data-tilt>
+            <div class="kartu-teduh anim-fade-up el-2">
                 <h2 class="judul-kartu">🪟 Tentang Aku</h2>
                 <ul class="info-list">
                     <li><span class="label">Nama</span> <span class="isi">Dimas</span></li>
@@ -531,22 +544,22 @@
                 </ul>
             </div>
 
-            <div class="kartu-teduh anim-fade-up el-3" data-tilt>
+            <div class="kartu-teduh anim-fade-up el-3">
                 <h2 class="judul-kartu">🧺 Yang Aku Suka</h2>
-                <p style="font-size: 13.5px; margin-bottom: 12px; color: #708473; margin-top: 0;">Hal-hal kecil yang bikin hariku lebih berwarna:</p>
+                <p style="font-size: 13px; margin-bottom: 12px; color: #728675; margin-top: 0;">Hal-hal kecil yang bikin hariku lebih berwarna:</p>
                 <div class="badge-container">
                     <span class="badge-lembut">🥙 Kebab</span>
                     <span class="badge-lembut">🍜 Mie Ayam</span>
                     <span class="badge-lembut">🍔 Burger</span>
                     
                     <span class="badge-lembut clickable-transport" style="background-color: var(--krl-soft); color: var(--krl-dark);" onclick="openTransportModal('krl')">🚅 Naik KRL</span>
-                    <span class="badge-lembut clickable-transport" style="background-color: var(--mrt-soft); color: var(--mrt-dark);" onclick="openTransportModal('mrt')">🚈 MRT</span>
+                    <span class="badge-lembut clickable-transport" style="background-color: var(--mrt-soft); color: var(--mrt-dark);" onclick="openTransportModal('mrt')">::: MRT</span>
                     <span class="badge-lembut clickable-transport" style="background-color: var(--lrt-soft); color: var(--lrt-dark);" onclick="openTransportModal('lrt')">🚆 LRT</span>
                     <span class="badge-lembut clickable-transport" style="background-color: var(--tj-soft); color: var(--tj-dark);" onclick="openTransportModal('tj')">🚌 TransJakarta</span>
                 </div>
             </div>
 
-            <div class="kartu-teduh anim-fade-up el-4" data-tilt>
+            <div class="kartu-teduh anim-fade-up el-4">
                 <h2 class="judul-kartu">⚓ Impian & Rencana</h2>
                 <ul class="info-list">
                     <li><span class="label">Yang lagi dikejar</span> <span class="isi">Belajar giat di SMK</span></li>
@@ -607,14 +620,14 @@
 
     <script>
         const svgStorage = {
-            krl_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1f2421"/><rect x="130" y="30" width="140" height="150" rx="20" fill="#dd1c24"/><rect x="135" y="35" width="130" height="60" rx="10" fill="#222"/><rect x="145" y="42" width="50" height="40" fill="#64b5f6" rx="4"/><rect x="205" y="42" width="50" height="40" fill="#64b5f6" rx="4"/><rect x="130" y="105" width="140" height="15" fill="#ffcc00"/><rect x="150" y="135" width="100" height="35" fill="#777" rx="5"/><circle cx="165" cy="152" r="10" fill="#fff"/><circle cx="235" cy="152" r="10" fill="#fff"/><line x1="200" y1="30" x2="200" y2="10" stroke="#aaa" stroke-width="4"/><path d="M180 10 L220 10 L200 0 Z" fill="#aaa"/></svg>`,
-            krl_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1f2421"/><rect x="20" y="60" width="360" height="100" rx="10" fill="#ccc"/><rect x="20" y="110" width="360" height="15" fill="#dd1c24"/><rect x="20" y="130" width="360" height="8" fill="#ffcc00"/><rect x="40" y="70" width="50" height="30" fill="#333" rx="5"/><rect x="110" y="70" width="60" height="30" fill="#333" rx="2"/><rect x="230" y="70" width="60" height="30" fill="#333" rx="2"/><circle cx="80" cy="170" r="14" fill="#444"/><circle cx="130" cy="170" r="14" fill="#444"/><circle cx="270" cy="170" r="14" fill="#444"/><circle cx="320" cy="170" r="14" fill="#444"/></svg>`,
-            mrt_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151a21"/><rect x="130" y="30" width="140" height="150" rx="25" fill="#005493"/><rect x="130" y="30" width="140" height="50" rx="15" fill="#003761"/><rect x="140" y="65" width="120" height="55" rx="10" fill="#111"/><rect x="148" y="72" width="48" height="40" fill="#a6d5fa" rx="4"/><rect x="204" y="72" width="48" height="40" fill="#a6d5fa" rx="4"/><rect x="145" y="140" width="25" height="10" fill="#ffeb3b" rx="2"/><rect x="230" y="140" width="25" height="10" fill="#ffeb3b" rx="2"/><circle cx="165" cy="175" r="12" fill="#333"/><circle cx="235" cy="175" r="12" fill="#333"/></svg>`,
-            mrt_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151a21"/><rect x="10" y="55" width="380" height="105" rx="12" fill="#e0e0e0"/><rect x="10" y="55" width="380" height="18" fill="#005493"/><rect x="35" y="85" width="70" height="35" fill="#222" rx="4"/><rect x="120" y="85" width="70" height="35" fill="#222" rx="4"/><rect x="210" y="85" width="70" height="35" fill="#222" rx="4"/><circle cx="70" cy="170" r="13" fill="#222"/><circle cx="330" cy="170" r="13" fill="#222"/></svg>`,
-            lrt_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1a1c1e"/><rect x="135" y="35" width="130" height="145" rx="30" fill="#222"/><rect x="135" y="35" width="130" height="145" rx="30" stroke="#e61c24" stroke-width="6" fill="none"/><rect x="145" y="55" width="110" height="50" rx="15" fill="#4fc3f7"/><rect x="155" y="125" width="90" height="10" fill="#e61c24" rx="2"/><circle cx="170" cy="160" r="8" fill="#fff"/><circle cx="230" cy="160" r="8" fill="#fff"/></svg>`,
-            lrt_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1a1c1e"/><rect x="20" y="60" width="360" height="95" rx="15" fill="#333"/><rect x="20" y="60" width="360" height="15" fill="#e61c24"/><rect x="40" y="85" width="60" height="30" fill="#111" rx="5"/><rect x="115" y="85" width="80" height="30" fill="#111" rx="2"/><rect x="205" y="85" width="80" height="30" fill="#111" rx="2"/><circle cx="90" cy="165" r="12" fill="#555"/><circle cx="310" cy="165" r="12" fill="#555"/></svg>`,
-            tj_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1c2126"/><rect x="120" y="25" width="160" height="145" rx="15" fill="#00adef"/><rect x="120" y="110" width="160" height="10" fill="#fff"/><rect x="130" y="35" width="140" height="55" rx="5" fill="#111"/><rect x="140" y="42" width="120" height="35" fill="#81d4fa" rx="2"/><circle cx="150" cy="150" r="10" fill="#fff"/><circle cx="250" cy="150" r="10" fill="#fff"/><rect x="145" y="170" width="35" height="20" fill="#222"/><rect x="220" y="170" width="35" height="20" fill="#222"/></svg>`,
-            tj_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1c2126"/><rect x="15" y="45" width="370" height="110" rx="10" fill="#00adef"/><rect x="15" y="115" width="370" height="12" fill="#fff"/><rect x="35" y="55" width="45" height="40" fill="#222" rx="3"/><rect x="90" y="55" width="65" height="40" fill="#222" rx="2"/><rect x="165" y="55" width="65" height="40" fill="#222" rx="2"/><rect x="240" y="55" width="65" height="40" fill="#222" rx="2"/><circle cx="90" cy="165" r="18" fill="#111"/><circle cx="90" cy="165" r="8" fill="#777"/><circle cx="310" cy="165" r="18" fill="#111"/><circle cx="310" cy="165" r="8" fill="#777"/></svg>`
+            krl_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="135" y="25" width="130" height="155" rx="18" fill="#dd1c24"/><rect x="140" y="30" width="120" height="55" rx="8" fill="#222"/><rect x="148" y="36" width="48" height="36" fill="#52b2f2" rx="4"/><rect x="204" y="36" width="48" height="36" fill="#52b2f2" rx="4"/><rect x="135" y="98" width="130" height="14" fill="#ffcc00"/><rect x="150" y="130" width="100" height="32" fill="#666" rx="4"/><circle cx="168" cy="146" r="8" fill="#fff"/><circle cx="232" cy="146" r="8" fill="#fff"/><line x1="200" y1="25" x2="200" y2="8" stroke="#999" stroke-width="3"/><path d="M185 8 L215 8" stroke="#999" stroke-width="3"/></svg>`,
+            krl_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="15" y="55" width="370" height="100" rx="10" fill="#d5d5d5"/><rect x="15" y="105" width="370" height="14" fill="#dd1c24"/><rect x="15" y="124" width="370" height="8" fill="#ffcc00"/><rect x="35" y="65" width="55" height="30" fill="#252525" rx="3"/><rect x="105" y="65" width="65" height="30" fill="#252525" rx="2"/><rect x="230" y="65" width="65" height="30" fill="#252525" rx="2"/><circle cx="75" cy="166" r="13" fill="#333"/><circle cx="125" cy="166" r="13" fill="#333"/><circle cx="275" cy="166" r="13" fill="#333"/><circle cx="325" cy="166" r="13" fill="#333"/></svg>`,
+            mrt_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="135" y="25" width="130" height="155" rx="22" fill="#005493"/><rect x="135" y="25" width="130" height="45" rx="14" fill="#003761"/><rect x="142" y="60" width="116" height="55" rx="8" fill="#151515"/><rect x="149" y="67" width="46" height="38" fill="#9cd2f7" rx="3"/><rect x="205" y="67" width="46" height="38" fill="#9cd2f7" rx="3"/><rect x="146" y="132" width="22" height="8" fill="#ffeb3b" rx="2"/><rect x="232" y="132" width="22" height="8" fill="#ffeb3b" rx="2"/><circle cx="165" cy="168" r="10" fill="#252525"/><circle cx="235" cy="168" r="10" fill="#252525"/></svg>`,
+            mrt_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="15" y="50" width="370" height="110" rx="12" fill="#e8e8e8"/><rect x="15" y="50" width="370" height="16" fill="#005493"/><rect x="40" y="80" width="75" height="35" fill="#222" rx="4"/><rect x="130" y="80" width="75" height="35" fill="#222" rx="4"/><rect x="235" y="80" width="75" height="35" fill="#222" rx="4"/><circle cx="80" cy="170" r="12" fill="#222"/><circle cx="320" cy="170" r="12" fill="#222"/></svg>`,
+            lrt_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="135" y="25" width="130" height="155" rx="28" fill="#1a1a1a"/><rect x="135" y="25" width="130" height="155" rx="28" stroke="#e61c24" stroke-width="5" fill="none"/><rect x="145" y="48" width="110" height="52" rx="12" fill="#4fc3f7"/><rect x="155" y="118" width="90" height="8" fill="#e61c24" rx="2"/><circle cx="170" cy="150" r="7" fill="#fff"/><circle cx="230" cy="150" r="7" fill="#fff"/></svg>`,
+            lrt_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="20" y="55" width="360" height="100" rx="12" fill="#282828"/><rect x="20" y="55" width="360" height="14" fill="#e61c24"/><rect x="45" y="80" width="65" height="32" fill="#111" rx="4"/><rect x="125" y="80" width="85" height="32" fill="#111" rx="2"/><rect x="225" y="80" width="85" height="32" fill="#111" rx="2"/><circle cx="95" cy="165" r="11" fill="#444"/><circle cx="305" cy="165" r="11" fill="#444"/></svg>`,
+            tj_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="125" y="25" width="150" height="150" rx="12" fill="#00adef"/><rect x="125" y="105" width="150" height="10" fill="#fff"/><rect x="135" y="35" width="130" height="55" rx="4" fill="#151515"/><rect x="142" y="42" width="116" height="36" fill="#7cd3f7" rx="2"/><circle cx="155" cy="145" r="9" fill="#fff"/><circle cx="245" cy="145" r="9" fill="#fff"/><rect x="148" y="170" width="30" height="15" fill="#222"/><rect x="222" y="170" width="30" height="15" fill="#222"/></svg>`,
+            tj_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151916"/><rect x="15" y="45" width="370" height="115" rx="8" fill="#00adef"/><rect x="15" y="115" width="370" height="12" fill="#fff"/><rect x="35" y="55" width="50" height="42" fill="#222" rx="3"/><rect x="95" y="55" width="70" height="42" fill="#222" rx="2"/><rect x="175" y="55" width="70" height="42" fill="#222" rx="2"/><circle cx="90" cy="168" r="16" fill="#111"/><circle cx="90" cy="168" r="7" fill="#888"/><circle cx="310" cy="168" r="16" fill="#111"/><circle cx="310" cy="168" r="7" fill="#888"/></svg>`
         };
 
         const transportDatabase = {
@@ -648,7 +661,7 @@
                 title: "LRT Jabodebek",
                 sub: "PT KERETA API INDONESIA · DRIVERLESS SYSTEM",
                 theme: "theme-lrt",
-                history: "Light Rail Transit (LRT) Jabodebek melayani mobilitas masyarakat urban penyangga ibu kota dari Bekasi Timur dan Cibubur langsung menuju pusat kota Jakarta via jalur layang (elevated). Keunggulan utama sistem LRT Jabodebek adalah adopsi teknologi persinyalan tingkat tinggi tanpa masinis yang dikendalikan penuh dari Pusat Kendali Operasi (OCC).",
+                history: "Line Lintas Raya Terpadu (LRT) Jabodebek melayani mobilitas masyarakat urban penyangga ibu kota dari Bekasi Timur dan Cibubur langsung menuju pusat kota Jakarta via jalur layang (elevated). Keunggulan utama sistem LRT Jabodebek adalah adopsi teknologi persinyalan tingkat tinggi tanpa masinis yang dikendalikan penuh dari Pusat Kendali Operasi (OCC).",
                 specs: [
                     { label: "Produsen Unit", val: "PT INKA (Persero) Madiun" },
                     { label: "Otomatisasi", val: "GoA Level 3 (Driverless)" },
@@ -725,11 +738,21 @@
             const slides = document.querySelectorAll('.vector-slide');
             if (slides.length === 0) return;
 
+            // Berikan kelas animasi exit ke slide lama
             slides[currentSlideIndex].classList.remove('active');
+            if (direction === -1) {
+                slides[currentSlideIndex].classList.add('slide-exit-left');
+            }
+
+            setTimeout(() => {
+                slides.forEach(s => s.classList.remove('slide-exit-left'));
+            }, 350);
+
             currentSlideIndex += direction;
             if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
             if (currentSlideIndex < 0) currentSlideIndex = slides.length - 1;
 
+            // Hidupkan slide baru
             slides[currentSlideIndex].classList.add('active');
             updateSlideCounter();
         }
@@ -738,30 +761,11 @@
             document.getElementById('slideCounter').innerText = `${currentSlideIndex + 1} / ${currentVectorsArray.length}`;
         }
 
-        // TILT EFFECT YANG DIHALUSKAN (SPRING SENSATION)
-        const cards = document.querySelectorAll('[data-tilt]');
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                // Menggunakan transisi 3D halus pas digerakin
-                card.style.transform = `perspective(1000px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale3d(1.015, 1.015, 1.015)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-                card.style.transition = 'transform 0.5s var(--ease-smooth)';
-            });
-            card.addEventListener('mouseenter', () => {
-                card.style.transition = 'transform 0.15s var(--ease-smooth)';
-            });
-        });
-
-        // BUBBLE BOOM KLIK PARTIKEL (ALUS)
+        // BUBBLE FUN SPARK CLICKS REACTION
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('slide-nav') || e.target.classList.contains('btn-close-modal')) return;
             const count = 6;
-            const colors = ['#dd1c24', '#005493', '#00adef', '#3e4e3e'];
+            const colors = ['#dd1c24', '#005493', '#00adef', '#789c7f'];
             for (let i = 0; i < count; i++) {
                 const el = document.createElement('div');
                 el.className = 'click-particle';
@@ -769,13 +773,13 @@
                 el.style.top = e.clientY + 'px';
                 el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 const angle = (i / count) * Math.PI * 2;
-                const dist = 25 + Math.random() * 30;
+                const dist = 20 + Math.random() * 25;
                 el.style.setProperty('--x', Math.cos(angle) * dist + 'px');
                 el.style.setProperty('--y', Math.sin(angle) * dist + 'px');
                 document.body.appendChild(el);
-                setTimeout(() => el.remove(), 650);
+                setTimeout(() => el.remove(), 600);
             }
         });
     </script>
 </body>
-    </html>
+</html>
