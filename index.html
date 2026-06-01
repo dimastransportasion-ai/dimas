@@ -1,61 +1,401 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruang Tenang Dimas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-taman: #f4f7f5; /* Hijau muda yang sangat lembut/sage soft */
-            --warna-daun: #556b2f; /* Hijau olive tua untuk teks utama */
-            --warna-bunga: #e8d3cb; /* Warna pastel peach lembut */
-            --putih-hangat: #ffffff;
-            --teks-lembut: #4a5d4e;
-            --bayangan-halus: 0 10px 30px rgba(85, 107, 47, 0.04);
-            
-            /* Warna badge transportasi versi sangat pastel */
-            --krl-soft: #f5cd79;
-            --mrt-soft: #78c2ad;
-            --lrt-soft: #a8dadc;
-            --tj-soft: #ffb7b2;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ruang Perjalanan Dimas — Ruang Tenang & Petualangan (3D)</title>
+  <meta name="description" content="Sudut Dimas: cerita, rencana SMK, catatan perjalanan, dan update KRL realtime." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+  <!-- Leaflet (peta) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+gF7k6bqgkzv6k0yqkz4lW1sJw1g5j2JkqvZ3Z6CI=" crossorigin=""/>
+  <style>
+    :root{
+      --bg-taman:#eef7f0;
+      --teks:#2f4a3f;
+      --accent:#2e8b57;
+      --card:#ffffff;
+      --muted:#7b8b7b;
+      --glass: rgba(255,255,255,0.75);
+      --shadow: 0 12px 30px rgba(46,139,87,0.06);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      margin:0;
+      padding:24px;
+      background: linear-gradient(180deg,var(--bg-taman), #eaf6f0 60%);
+      color:var(--teks);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--bg-taman);
-            color: var(--warna-daun);
-            margin: 0;
-            padding: 24px;
-            overflow-x: hidden;
-        }
+    /* Accessibility */
+    .skip-link{
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus{
+      left: 16px;
+      top: 16px;
+      width: auto;
+      height: auto;
+      padding:8px 12px;
+      background:#fff;
+      border-radius:8px;
+      box-shadow:var(--shadow);
+      z-index:1000;
+    }
 
-        .main-wrapper {
-            max-width: 650px;
-            margin: 40px auto;
-        }
+    .page {
+      max-width: 980px;
+      margin: 40px auto;
+      position:relative;
+    }
 
-        /* --- HEADER SEPERTI JENDELA KAMAR SHO --- */
-        .header-teduh {
-            background-color: var(--putih-hangat);
-            padding: 40px 20px;
-            border-radius: 32px;
-            text-align: center;
-            box-shadow: var(--bayangan-halus);
-            margin-bottom: 24px;
-            border: 1px solid rgba(85, 107, 47, 0.08);
-            position: relative;
-        }
+    header.site-header{
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), var(--glass));
+      padding:28px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      display:flex;
+      gap:20px;
+      align-items:center;
+      border:1px solid rgba(46,139,87,0.06);
+    }
 
-        .header-teduh h1 {
-            font-family: 'Poppins', sans-serif;
-            margin: 12px 0 0 0;
-            font-size: 26px;
-            color: var(--warna-daun);
-            font-weight: 600;
-            letter-spacing: -0.5px;
+    .brand { display:flex; gap:12px; align-items:center; }
+    .logo {
+      width:64px; height:64px; border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px;
+      background: linear-gradient(135deg,#effff4,#f7fff7);
+      box-shadow: 0 8px 20px rgba(46,139,87,0.06);
+    }
+    h1{ margin:0; font-family:'Poppins',sans-serif; font-size:20px; color:var(--accent) }
+    p.lead { margin:4px 0 0 0; color:var(--muted); font-size:14px }
+
+    /* Hero 3D carousel */
+    .hero{
+      margin-top:20px;
+      position:relative;
+      border-radius:20px;
+      overflow:visible;
+      padding:18px;
+    }
+
+    .carousel-wrap {
+      perspective: 1200px;
+      perspective-origin: 50% 40%;
+      margin: 0 auto;
+      max-width: 980px;
+    }
+
+    .carousel {
+      width:100%;
+      height:240px;
+      position:relative;
+      transform-style: preserve-3d;
+      transition: transform 800ms cubic-bezier(.22,.9,.3,1);
+      margin: 0 auto;
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(246,255,247,0.9));
+      border:1px solid rgba(46,139,87,0.04);
+      overflow:visible;
+    }
+
+    .panel {
+      position:absolute;
+      inset:12px;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      padding:28px;
+      border-radius:14px;
+      backface-visibility: hidden;
+      transform-origin: center center;
+      transition: box-shadow 240ms;
+      will-change: transform;
+      background: linear-gradient(180deg,#fff,#fbfff9);
+      border:1px solid rgba(46,139,87,0.03);
+    }
+
+    .panel h2 { margin:0; font-size:20px; color:var(--teks) }
+    .panel p { color:var(--muted); margin-top:6px }
+
+    /* arrangement: three panels spaced by 120deg around Y axis */
+    .panel--0 { transform: rotateY(0deg) translateZ(440px) scale(1); left:0; right:0; }
+    .panel--1 { transform: rotateY(120deg) translateZ(440px) scale(.95); left:0; right:0; }
+    .panel--2 { transform: rotateY(240deg) translateZ(440px) scale(.92); left:0; right:0; }
+
+    .panel-left { flex:1 }
+    .panel-right { width:220px; display:flex;align-items:center;justify-content:center }
+
+    .visual-3d {
+      width:200px;height:140px;border-radius:12px;
+      background: linear-gradient(120deg,#fff,#f6fff7);
+      display:flex;align-items:center;justify-content:center;
+      font-size:44px; box-shadow: 0 10px 30px rgba(30,80,40,0.06);
+      transform-style: preserve-3d;
+      transition: transform 260ms ease;
+    }
+
+    .carousel-controls{
+      position:absolute;
+      bottom:-6px;
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;gap:10px;
+      z-index:40;
+    }
+    .control {
+      background: #fff;
+      border-radius:999px;
+      width:44px;height:36px;
+      border:1px solid rgba(46,139,87,0.06);
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      box-shadow: 0 6px 12px rgba(10,10,10,0.04);
+      font-weight:700;color:var(--accent);
+    }
+
+    .info-dot {
+      display:inline-block;width:10px;height:10px;border-radius:999px;background:rgba(47,74,63,0.12)
+    }
+    .info-dot.active { background: var(--accent) }
+
+    /* layout grid & rest (kept from before) */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:20px;
+      margin-top:22px;
+    }
+    main.content{ background:var(--card); border-radius:16px; padding:20px; box-shadow:var(--shadow); border:1px solid rgba(46,139,87,0.03); }
+    aside.sidebar{ position:sticky; top:24px; height:max-content; }
+    .card{ background:var(--card); padding:16px; border-radius:12px; margin-bottom:14px; border:1px solid rgba(46,139,87,0.03); }
+    .small { color:var(--muted); font-size:13px }
+    .gallery{ display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:10px; }
+    .gallery img{ width:100%; height:100%; object-fit:cover; border-radius:10px; display:block}
+    #map{ width:100%; height:260px; border-radius:12px; border:1px solid rgba(46,139,87,0.06); }
+    .krl-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px }
+    .krl-item{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfffb); border:1px solid rgba(46,139,87,0.03) }
+    .reveal{ opacity:0; transform: translateY(14px) scale(.995); transition: all 560ms cubic-bezier(.22,.9,.3,1) }
+    .reveal.visible{ opacity:1; transform:none }
+    footer{ margin-top:26px; text-align:center; color:var(--muted); font-size:13px }
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{ grid-template-columns: 1fr; }
+      aside.sidebar{ position:static; top:auto; }
+      .carousel { height:300px }
+      .panel-right { display:none } /* simplify for small screens */
+      .panel { padding:20px }
+    }
+
+    /* reduced motion: disable 3D heavy transforms */
+    @media (prefers-reduced-motion: reduce){
+      .carousel, .panel, .visual-3d, .panel--0, .panel--1, .panel--2 {
+        transition: none !important;
+        transform: none !important;
+      }
+      .carousel-wrap { perspective: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke konten</a>
+
+  <div class="page" role="document">
+    <header class="site-header" role="banner">
+      <div class="brand" aria-hidden="false">
+        <div class="logo" aria-hidden="true">🌿</div>
+        <div>
+          <h1>Ruang Perjalanan Dimas</h1>
+          <p class="lead">Senang-senang, rencana SMK, dan jejak perjalanan — dari Bekasi ke dunia.</p>
+        </div>
+      </div>
+      <nav style="margin-left:auto;">
+        <a href="#main" style="text-decoration:none;color:var(--accent);font-weight:600">Mulai</a>
+      </nav>
+    </header>
+
+    <!-- Hero 3D carousel -->
+    <section class="hero" aria-label="Hero 3D carousel" id="hero">
+      <div class="carousel-wrap">
+        <div id="carousel" class="carousel" role="list">
+          <article class="panel panel--0" role="listitem" data-index="0" aria-hidden="false">
+            <div class="panel-left">
+              <h2>Naik KRL — Cerita Perjalanan</h2>
+              <p>Suasana pagi di stasiun dan sudut baru untuk difoto. Setiap perjalanan punya cerita.</p>
+              <a class="cta" href="#trips" style="display:inline-block;margin-top:8px;padding:8px 12px;background:var(--accent);color:#fff;border-radius:10px;text-decoration:none;font-weight:700">Jelajahi Rencana</a>
+            </div>
+            <div class="panel-right">
+              <div class="visual-3d" aria-hidden="true">🚆</div>
+            </div>
+          </article>
+
+          <article class="panel panel--1" role="listitem" data-index="1" aria-hidden="true">
+            <div class="panel-left">
+              <h2>Jelajah Kota & Makanan</h2>
+              <p>Kebab dan mie ayam jadi peta rasa. Foto & catatan ada di galeri.</p>
+              <a class="cta" href="#gallery" style="display:inline-block;margin-top:8px;padding:8px 12px;background:var(--accent);color:#fff;border-radius:10px;text-decoration:none;font-weight:700">Lihat Galeri</a>
+            </div>
+            <div class="panel-right">
+              <div class="visual-3d" aria-hidden="true">🥙</div>
+            </div>
+          </article>
+
+          <article class="panel panel--2" role="listitem" data-index="2" aria-hidden="true">
+            <div class="panel-left">
+              <h2>Impian Banda Neira</h2>
+              <p>Duduk di pasir, dengar ombak, potret matahari—suatu hari.</p>
+              <a class="cta" href="#plans" style="display:inline-block;margin-top:8px;padding:8px 12px;background:var(--accent);color:#fff;border-radius:10px;text-decoration:none;font-weight:700">Rencana Menabung</a>
+            </div>
+            <div class="panel-right">
+              <div class="visual-3d" aria-hidden="true">🏝️</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="carousel-controls" role="tablist" aria-label="Kontrol carousel">
+          <button class="control" data-action="prev" aria-label="Sebelumnya">◀</button>
+          <div style="display:flex;align-items:center;gap:8px;padding:0 8px">
+            <span class="info-dot" data-dot="0"></span>
+            <span class="info-dot" data-dot="1"></span>
+            <span class="info-dot" data-dot="2"></span>
+          </div>
+          <button class="control" data-action="next" aria-label="Berikutnya">▶</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <main class="content" id="main" tabindex="-1" role="main">
+        <!-- About -->
+        <section class="card reveal" id="about">
+          <h3>Halo, aku Dimas 🌿</h3>
+          <p class="small">15 tahun, tinggal di Bekasi. Lagi persiapan SMK sambil belajar fotografi, naik KRL tiap hari, dan menabung buat Canon R50.</p>
+          <hr style="border:none;border-top:1px solid #f2f5f2;margin:12px 0">
+          <p>Halaman ini sekarang lebih panjang supaya bisa nyimpen catatan perjalananku: tips naik KRL, rencana weekend, galeri foto, dan pembaruan status KRL realtime—jadi kalau ada gangguan bisa cepat terlihat.</p>
+        </section>
+
+        <!-- Gallery -->
+        <section class="card reveal" id="gallery">
+          <h3>Galeri Perjalanan</h3>
+          <div class="gallery" aria-hidden="false">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Pemandangan stasiun pagi">
+            <img src="https://images.unsplash.com/photo-1542317854-6e63a0af0b4d?q=80&w=800&auto=format&fit=crop" alt="Makanan jalanan">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=800&auto=format&fit=crop" alt="Pantai dan ombak">
+            <img src="https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=800&auto=format&fit=crop" alt="Kereta di rel">
+          </div>
+        </section>
+
+        <!-- Trips / Plans -->
+        <section class="card reveal" id="trips">
+          <h3>Rencana & Impian</h3>
+          <ul>
+            <li>Masuk SMK dan fokus pelajaran</li>
+            <li>Nabung untuk kamera Canon R50</li>
+            <li>Perjalanan impian: Banda Neira</li>
+            <li>Itinerary pendek: one-day KRL photoshoot around Jakarta</li>
+          </ul>
+        </section>
+
+        <!-- News + Realtime -->
+        <section class="card reveal" id="news">
+          <h3>Berita & Update KRL (realtime)</h3>
+          <p class="small">Panel ini melakukan update otomatis setiap 20 detik (contoh). Ganti KRL_API_URL di script untuk ambil dari API nyata.</p>
+          <div id="krl-status" aria-live="polite">
+            <ul class="krl-list" id="krl-list">
+              <!-- items injected by JS -->
+            </ul>
+          </div>
+        </section>
+
+        <!-- Map -->
+        <section class="card reveal" id="map-section">
+          <h3>Map — Rute & Stasiun</h3>
+          <div id="map" role="application" aria-label="Peta rute KRL dan stasiun"></div>
+          <p class="small" style="margin-top:8px">Tandai stasiun favoritmu — marker disini hanya contoh.</p>
+        </section>
+
+        <!-- Footer note -->
+        <section class="card reveal" id="final-note">
+          <h3>Catatan Penutup</h3>
+          <p>Terima kasih sudah mampir—halaman ini dirancang supaya tenang tapi juga interaktif. Kalau mau, saya bisa sambungkan notifikasi realtime (push) jika ada gangguan besar di KRL.</p>
+        </section>
+      </main>
+
+      <aside class="sidebar">
+        <div class="card reveal">
+          <h4>Info Singkat</h4>
+          <p class="small">Nama: Dimas — Bekasi • Usia: 15 • Mau masuk SMK</p>
+        </div>
+
+        <div class="card reveal" id="news-sidebar">
+          <h4>Berita Singkat</h4>
+          <ul id="news-list" style="padding-left:0;margin:0;list-style:none"></ul>
+        </div>
+
+        <div class="card reveal">
+          <h4>Favorit Perjalanan</h4>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="background:#f7fff7;padding:6px 10px;border-radius:999px;font-weight:600;color:var(--accent)">🚅 KRL</span>
+            <span style="background:#fff5f5;padding:6px 10px;border-radius:999px;font-weight:600;color:#b34b4b">🥙 Kebab</span>
+            <span style="background:#fff9ed;padding:6px 10px;border-radius:999px;font-weight:600;color:#9a6b2d">🏝️ Banda Neira</span>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+    <footer>
+      &copy; 2026 Ruang Perjalanan Dimas · Semoga hari-harimu penuh cerita.
+    </footer>
+
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-QVdGI+g6kW0JqZV8pP5sA3bXK2n2Q0yJwGk/qk1s9iM=" crossorigin=""></script>
+
+  <script>
+    /**********************
+     * 3D Carousel logic
+     **********************/
+    (function(){
+      const carousel = document.getElementById('carousel');
+      const panels = Array.from(carousel.querySelectorAll('.panel'));
+      const dots = Array.from(document.querySelectorAll('.info-dot'));
+      const prevBtn = document.querySelector('[data-action="prev"]');
+      const nextBtn = document.querySelector('[data-action="next"]');
+      const total = panels.length;
+      let index = 0;
+      let auto = true;
+      let autoTimer = null;
+
+      // compute rotation angle for index
+      function getRotationForIndex(i){
+        // rotate so panel 0 faces front at 0deg, each panel spaced 120deg
+        return - (i * (360 / total));
+      }
+
+      function applyRotation(){
+        const rot = getRotationForIndex(index);
+        carousel.style.transform = `translateZ(-220px) rotateY(${rot}deg)`;
+        panels.forEach((p, idx) => {
+          const hidden = idx !== index;
+          p.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+       
