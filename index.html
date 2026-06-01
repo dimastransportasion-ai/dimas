@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ruang Tenang Dimas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-taman: #eef2eb; 
@@ -12,8 +12,8 @@
             --warna-bunga: #dfc7be; 
             --putih-hangat: #fdfdfb;
             --teks-lembut: #5a6e5d;
-            --bayangan-halus: 0 20px 50px rgba(62, 78, 62, 0.07);
-            --bayangan-3d: 0 30px 60px rgba(30, 45, 30, 0.15);
+            --bayangan-halus: 0 20px 50px rgba(62, 78, 62, 0.05);
+            --bayangan-3d: 0 30px 60px rgba(30, 45, 30, 0.12);
             
             --krl-soft: #fceecb;
             --krl-dark: #5a4b2c;
@@ -23,6 +23,10 @@
             --lrt-dark: #2b4344;
             --tj-soft: #ffdcd9;
             --tj-dark: #5c3b38;
+
+            /* Kurva Animasi Mulus (Tren Web 2026) */
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * {
@@ -41,7 +45,7 @@
             min-height: 100vh;
         }
 
-        /* AREA EMOJI PINGGIR - FIXED & ANIMATED */
+        /* AREA EMOJI PINGGIR BERGERAK LEBIH ALUS */
         .area-emoji-pinggir {
             position: fixed;
             top: 0;
@@ -56,52 +60,59 @@
         .emoji-gerak {
             position: absolute;
             font-size: 32px;
-            opacity: 0.6;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.08));
+            opacity: 0.45;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.06));
+            will-change: transform;
         }
 
-        @keyframes gerakAlami-1 {
+        @keyframes gerakAlami {
             0% { transform: translateY(0px) rotate(0deg) scale(1); }
-            50% { transform: translateY(-25px) rotate(15deg) scale(1.1); }
+            33% { transform: translateY(-15px) rotate(5deg) scale(1.05); }
+            66% { transform: translateY(10px) rotate(-5deg) scale(0.95); }
             100% { transform: translateY(0px) rotate(0deg) scale(1); }
         }
 
-        @keyframes gerakAlami-2 {
-            0% { transform: translateY(0px) rotate(0deg) scale(1); }
-            50% { transform: translateY(-35px) rotate(-20deg) scale(1.05); }
-            100% { transform: translateY(0px) rotate(0deg) scale(1); }
-        }
-
-        @keyframes gerakAlami-3 {
-            0% { transform: translateY(0px) rotate(0deg) scale(1); }
-            50% { transform: translateY(-20px) rotate(10deg) scale(1.15); }
-            100% { transform: translateY(0px) rotate(0deg) scale(1); }
-        }
-
-        .pos-kiri-1 { top: 12%; left: 4%; animation: gerakAlami-1 5s ease-in-out infinite; }
-        .pos-kiri-2 { top: 42%; left: 3%; animation: gerakAlami-2 7s ease-in-out infinite 0.5s; }
-        .pos-kiri-3 { top: 72%; left: 5%; animation: gerakAlami-3 6s ease-in-out infinite 1s; }
+        .pos-kiri-1 { top: 12%; left: 4%; animation: gerakAlami 12s ease-in-out infinite; }
+        .pos-kiri-2 { top: 42%; left: 3%; animation: gerakAlami 15s ease-in-out infinite 1s; }
+        .pos-kiri-3 { top: 72%; left: 5%; animation: gerakAlami 14s ease-in-out infinite 2s; }
         
-        .pos-kanan-1 { top: 18%; right: 4%; animation: gerakAlami-2 6.5s ease-in-out infinite 0.2s; }
-        .pos-kanan-2 { top: 48%; right: 3%; animation: gerakAlami-3 5.5s ease-in-out infinite 0.7s; }
-        .pos-kanan-3 { top: 78%; right: 5%; animation: gerakAlami-1 7.5s ease-in-out infinite 1.2s; }
+        .pos-kanan-1 { top: 18%; right: 4%; animation: gerakAlami 13s ease-in-out infinite 0.5s; }
+        .pos-kanan-2 { top: 48%; right: 3%; animation: gerakAlami 16s ease-in-out infinite 1.5s; }
+        .pos-kanan-3 { top: 78%; right: 5%; animation: gerakAlami 11s ease-in-out infinite 2.5s; }
 
         @media (max-width: 768px) {
-            .emoji-gerak { font-size: 24px; opacity: 0.5; }
-            .pos-kiri-1 { left: 2%; } .pos-kiri-2 { left: 1%; } .pos-kiri-3 { left: 2%; }
-            .pos-kanan-1 { right: 2%; } .pos-kanan-2 { right: 1%; } .pos-kanan-3 { right: 2%; }
+            .emoji-gerak { font-size: 22px; opacity: 0.35; }
         }
 
-        /* MAIN WRAPPER WITH PERSPECTIVE FOR 3D EFFECT */
+        /* CONTAINER UTAMA */
         .main-wrapper {
             max-width: 620px;
             margin: 40px auto;
             position: relative;
             z-index: 2;
-            perspective: 1000px;
         }
 
-        /* HEADER ANIMATION */
+        /* ANIMASI ENTRANCE (MUNCUL BERURUTAN / STAGGERED) */
+        .anim-fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUpIn 0.8s var(--ease-smooth) forwards;
+        }
+
+        @keyframes fadeUpIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Set delay berurutan biar estetik pas dibuka */
+        .el-1 { animation-delay: 0.1s; }
+        .el-2 { animation-delay: 0.25s; }
+        .el-3 { animation-delay: 0.4s; }
+        .el-4 { animation-delay: 0.55s; }
+        .el-5 { animation-delay: 0.7s; }
+
         .header-teduh {
             background-color: var(--putih-hangat);
             padding: 45px 20px;
@@ -109,11 +120,11 @@
             text-align: center;
             box-shadow: var(--bayangan-halus);
             margin-bottom: 24px;
-            border: 1px solid rgba(62, 78, 62, 0.06);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(62, 78, 62, 0.04);
+            transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
         }
         .header-teduh:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             box-shadow: var(--bayangan-3d);
         }
 
@@ -129,13 +140,12 @@
         .icon-tanaman {
             font-size: 40px;
             display: block;
-            animation: float-icon 4s ease-in-out infinite;
+            animation: float-icon 5s ease-in-out infinite;
         }
 
         @keyframes float-icon {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-6px) rotate(3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(4deg); }
         }
 
         .sub-salam {
@@ -152,16 +162,14 @@
             gap: 18px;
         }
 
-        /* 3D FLOATING CARD DESIGN */
+        /* KARTU BIODATA */
         .kartu-teduh {
             background-color: var(--putih-hangat);
             border-radius: 28px;
             padding: 26px;
             box-shadow: var(--bayangan-halus);
-            border: 1px solid rgba(62, 78, 62, 0.05);
-            transform-style: preserve-3d;
-            transform: rotateX(0deg) rotateY(0deg);
-            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(62, 78, 62, 0.04);
+            transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
         }
         .kartu-teduh:hover {
             box-shadow: var(--bayangan-3d);
@@ -179,14 +187,12 @@
             padding-bottom: 12px;
             border-bottom: 1px solid #f2f5f2;
             margin-bottom: 16px;
-            transform: translateZ(20px); /* Efek Layering 3D */
         }
 
         .info-list {
             list-style: none;
             padding: 0;
             margin: 0;
-            transform: translateZ(15px);
         }
 
         .info-list li {
@@ -206,10 +212,6 @@
             padding: 4px 14px;
             border-radius: 14px;
             font-size: 14px;
-            transition: background-color 0.2s;
-        }
-        .kartu-teduh:hover .isi {
-            background-color: #e6eae6;
         }
 
         .badge-container {
@@ -217,7 +219,6 @@
             flex-wrap: wrap;
             gap: 8px;
             margin-top: 8px;
-            transform: translateZ(20px);
         }
         
         .badge-lembut {
@@ -230,39 +231,21 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            border: 1px solid rgba(62, 78, 62, 0.03);
-            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: default;
+            border: 1px solid rgba(62, 78, 62, 0.02);
+            transition: transform 0.4s var(--ease-out-back), box-shadow 0.4s var(--ease-smooth);
         }
 
-        /* STYLING KHUSUS BADGE TRANSPORTASI INTERAKTIF */
+        /* BADGE TRANSPORTASI DENGAN MICRO-INTERACTIONS */
         .clickable-transport {
             cursor: pointer !important;
-            position: relative;
+            user-select: none;
         }
         .clickable-transport:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
         }
-        .clickable-transport::after {
-            content: '⚡ Klik Detail';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.7);
-            font-size: 10px;
-            background: var(--warna-daun);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 8px;
-            opacity: 0;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-        .clickable-transport:hover::after {
-            opacity: 1;
-            bottom: -18px;
+        .clickable-transport:active {
+            transform: translateY(-1px) scale(0.98);
         }
 
         .pesan-box {
@@ -271,11 +254,9 @@
             padding: 28px;
             margin-top: 24px;
             box-shadow: var(--bayangan-halus);
-            border: 1px solid rgba(62, 78, 62, 0.05);
+            border: 1px solid rgba(62, 78, 62, 0.04);
             border-left: 4px solid #bfaea7;
-            transition: transform 0.3s;
         }
-        .pesan-box:hover { transform: translateY(-3px); }
 
         .pesan-box p {
             margin: 0;
@@ -303,132 +284,150 @@
         }
 
         /* ==========================================================================
-           MODAL SYSTEM DESIGN (MODE SERIUS PORTOFOLIO)
+           MODAL DENGAN TEKNIK TRANSISI POP-UP INTERAKTIF MEMBAL (ELASTIC ZOOM)
            ========================================================================== */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background-color: rgba(26, 36, 26, 0.6);
-            backdrop-filter: blur(12px);
+            background-color: rgba(26, 36, 26, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            /* Transisi hilangnya overlay halus */
+            transition: background-color 0.4s var(--ease-smooth), backdrop-filter 0.4s var(--ease-smooth), -webkit-backdrop-filter 0.4s var(--ease-smooth);
         }
 
         .modal-overlay.active {
-            opacity: 1;
             pointer-events: auto;
+            background-color: rgba(20, 28, 20, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         .modal-window {
             background-color: var(--putih-hangat);
             width: 100%;
-            max-width: 540px;
+            max-width: 520px;
             border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.8);
-            transform: translateY(50px) scale(0.95);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+            box-shadow: 0 40px 80px rgba(15,25,15,0px);
+            border: 1px solid rgba(255,255,255,0.6);
+            opacity: 0;
+            /* Efek Mengecil dan Turun di Awal */
+            transform: translateY(30px) scale(0.92);
+            /* Transisi membal pas masuk, mulus pas keluar */
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15), opacity 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
         }
 
         .modal-overlay.active .modal-window {
+            opacity: 1;
             transform: translateY(0) scale(1);
+            box-shadow: 0 40px 80px rgba(15,25,15,0.22);
         }
 
-        /* Jendela Header Sesuai Tema Transportasi */
         .modal-banner {
-            padding: 30px 24px;
+            padding: 28px 24px;
             color: white;
             position: relative;
         }
         
-        .modal-banner.theme-krl { background: linear-gradient(135deg, #1a4fa3, #2563b8); }
-        .modal-banner.theme-mrt { background: linear-gradient(135deg, #107c41, #1f9a55); }
-        .modal-banner.theme-lrt { background: linear-gradient(135deg, #1f8a8a, #2ca5a5); }
-        .modal-banner.theme-tj  { background: linear-gradient(135deg, #c43326, #dd4b3e); }
+        .modal-banner.theme-krl { background: linear-gradient(135deg, #dd1c24, #a30f14); }
+        .modal-banner.theme-mrt { background: linear-gradient(135deg, #005493, #003761); }
+        .modal-banner.theme-lrt { background: linear-gradient(135deg, #e61c24, #b01016); }
+        .modal-banner.theme-tj  { background: linear-gradient(135deg, #00adef, #0076a3); }
 
         .modal-banner h3 {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
         }
         .modal-banner p {
-            margin: 6px 0 0 0;
+            margin: 4px 0 0 0;
             font-size: 13px;
-            opacity: 0.8;
-            letter-spacing: 0.5px;
+            opacity: 0.85;
         }
 
         .btn-close-modal {
             position: absolute;
             top: 24px;
             right: 24px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.18);
             border: none;
             color: white;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.2s;
         }
-        .btn-close-modal:hover { background: rgba(255,255,255,0.35); }
+        .btn-close-modal:hover { 
+            background: rgba(255,255,255,0.3); 
+            transform: scale(1.1);
+        }
 
-        /* Jendela Slideshow / Galeri Foto */
+        /* SLIDESHOW SLIDE TRANSISI CROSS-FADE */
         .slideshow-area {
             position: relative;
-            height: 220px;
-            background-color: #111;
+            height: 200px;
+            background: #1e241f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
         }
 
-        .slide-img {
+        .vector-slide {
+            position: absolute;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            position: absolute;
-            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            transform: scale(1.02);
+            transform: scale(0.95);
+            transition: opacity 0.45s var(--ease-smooth), transform 0.45s var(--ease-smooth);
+            padding: 20px;
         }
-        .slide-img.active {
+        .vector-slide.active {
             opacity: 1;
+            transform: scale(1);
         }
 
-        /* Navigasi Slideshow */
+        /* Tombol Navigasi Slider */
         .slide-nav {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            border: none;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 13px;
             cursor: pointer;
             z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
-            transition: background 0.2s;
+            transition: background 0.3s, transform 0.2s var(--ease-out-back);
         }
-        .slide-nav:hover { background: rgba(0, 0, 0, 0.7); }
+        .slide-nav:hover { 
+            background: rgba(255, 255, 255, 0.25); 
+            transform: translateY(-50%) scale(1.1);
+        }
         .slide-prev { left: 14px; }
         .slide-next { right: 14px; }
 
@@ -436,30 +435,30 @@
             position: absolute;
             bottom: 12px;
             right: 14px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
             color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 10px;
             font-size: 11px;
             font-weight: 600;
-            backdrop-filter: blur(4px);
         }
 
-        /* Konten Teknis Deskripsi & Sejarah */
+        /* BOX TEKS DETAIL MODAL */
         .modal-body {
-            padding: 26px;
-            max-height: 260px;
+            padding: 24px;
+            max-height: 280px;
             overflow-y: auto;
         }
 
         .modal-section-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
             color: #8c9e8e;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .modal-text {
@@ -471,28 +470,28 @@
             margin-top: 0;
         }
 
-        /* Spesifikasi Unit */
         .specs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             background-color: #f5f8f5;
-            padding: 16px;
-            border-radius: 18px;
+            padding: 14px;
+            border-radius: 16px;
         }
-        .spec-item { display: flex; flex-direction: column; gap: 2px;}
+        .spec-item { display: flex; flex-direction: column; }
         .spec-lbl { font-size: 11px; color: #8fa392; text-transform: uppercase; }
-        .spec-val { font-size: 13.5px; font-weight: 700; color: var(--warna-daun); }
+        .spec-val { font-size: 13px; font-weight: 700; color: var(--warna-daun); }
 
-        /* CLICK PARTICLES EFFECT */
+        /* PARTICLES BOOM EFFECT */
         .click-particle {
             position: fixed;
-            width: 8px;
-            height: 8px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            animation: blowParticle 0.8s ease-out forwards;
+            will-change: transform, opacity;
+            animation: blowParticle 0.65s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
         }
         @keyframes blowParticle {
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
@@ -514,7 +513,7 @@
 
     <div class="main-wrapper">
         
-        <div class="header-teduh">
+        <div class="header-teduh anim-fade-up el-1">
             <span class="icon-tanaman">🌿</span>
             <h1>Selamat Datang di Sudut Kecilku</h1>
             <div class="sub-salam">Tempat teduh untuk berbagi cerita dan langkah baru</div>
@@ -522,7 +521,7 @@
 
         <div class="grid-lembut">
             
-            <div class="kartu-teduh" data-tilt>
+            <div class="kartu-teduh anim-fade-up el-2" data-tilt>
                 <h2 class="judul-kartu">🪟 Tentang Aku</h2>
                 <ul class="info-list">
                     <li><span class="label">Nama</span> <span class="isi">Dimas</span></li>
@@ -532,7 +531,7 @@
                 </ul>
             </div>
 
-            <div class="kartu-teduh" data-tilt>
+            <div class="kartu-teduh anim-fade-up el-3" data-tilt>
                 <h2 class="judul-kartu">🧺 Yang Aku Suka</h2>
                 <p style="font-size: 13.5px; margin-bottom: 12px; color: #708473; margin-top: 0;">Hal-hal kecil yang bikin hariku lebih berwarna:</p>
                 <div class="badge-container">
@@ -547,7 +546,7 @@
                 </div>
             </div>
 
-            <div class="kartu-teduh" data-tilt>
+            <div class="kartu-teduh anim-fade-up el-4" data-tilt>
                 <h2 class="judul-kartu">⚓ Impian & Rencana</h2>
                 <ul class="info-list">
                     <li><span class="label">Yang lagi dikejar</span> <span class="isi">Belajar giat di SMK</span></li>
@@ -558,7 +557,7 @@
 
         </div>
 
-        <div class="pesan-box">
+        <div class="pesan-box anim-fade-up el-5">
             <p>
                 Halo! Makasih ya udah mau mampir ke sini. Halaman ini aku buat sesederhana mungkin—kayak kamar yang jendelanya menghadap taman, tenang dan nggak banyak ribet. Sekarang aku lagi fokus buat bersiap masuk SMK, sambil pelan-pelan nabung buat kamera impian dan suatu hari bisa duduk santai dengerin ombak langsung di Banda Neira. Semoga siapapun yang baca ini harinya selalu menyenangkan ya!
                 <br><br>
@@ -585,120 +584,108 @@
             <div class="modal-banner" id="modalBanner">
                 <button class="btn-close-modal" onclick="closeTransportModal()">&times;</button>
                 <h3 id="modalTitle">Nama Transportasi</h3>
-                <p id="modalSub">Sub Deskripsi Otoritas Lintas</p>
+                <p id="modalSub">Otoritas Moda Lintas</p>
             </div>
 
             <div class="slideshow-area">
                 <button class="slide-nav slide-prev" onclick="changeSlide(-1)">&#10094;</button>
                 <button class="slide-nav slide-next" onclick="changeSlide(1)">&#10095;</button>
-                <div id="slideImagesContainer">
-                    </div>
-                <div class="slide-counter" id="slideCounter">1 / 3</div>
+                <div id="slideVectorContainer"></div>
+                <div class="slide-counter" id="slideCounter">1 / 2</div>
             </div>
 
             <div class="modal-body">
                 <div class="modal-section-title">Sejarah & Operasional</div>
-                <p class="modal-text" id="modalHistory">Narasi sejarah transportasi...</p>
+                <p class="modal-text" id="modalHistory">Narasi...</p>
 
                 <div class="modal-section-title">Spesifikasi Armada</div>
-                <div class="specs-grid" id="modalSpecs">
-                    </div>
+                <div class="specs-grid" id="modalSpecs"></div>
             </div>
 
         </div>
     </div>
 
     <script>
-        // DATA HISTORIS DENGAN REAL FOTO HIGH RESOLUTION
+        const svgStorage = {
+            krl_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1f2421"/><rect x="130" y="30" width="140" height="150" rx="20" fill="#dd1c24"/><rect x="135" y="35" width="130" height="60" rx="10" fill="#222"/><rect x="145" y="42" width="50" height="40" fill="#64b5f6" rx="4"/><rect x="205" y="42" width="50" height="40" fill="#64b5f6" rx="4"/><rect x="130" y="105" width="140" height="15" fill="#ffcc00"/><rect x="150" y="135" width="100" height="35" fill="#777" rx="5"/><circle cx="165" cy="152" r="10" fill="#fff"/><circle cx="235" cy="152" r="10" fill="#fff"/><line x1="200" y1="30" x2="200" y2="10" stroke="#aaa" stroke-width="4"/><path d="M180 10 L220 10 L200 0 Z" fill="#aaa"/></svg>`,
+            krl_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1f2421"/><rect x="20" y="60" width="360" height="100" rx="10" fill="#ccc"/><rect x="20" y="110" width="360" height="15" fill="#dd1c24"/><rect x="20" y="130" width="360" height="8" fill="#ffcc00"/><rect x="40" y="70" width="50" height="30" fill="#333" rx="5"/><rect x="110" y="70" width="60" height="30" fill="#333" rx="2"/><rect x="230" y="70" width="60" height="30" fill="#333" rx="2"/><circle cx="80" cy="170" r="14" fill="#444"/><circle cx="130" cy="170" r="14" fill="#444"/><circle cx="270" cy="170" r="14" fill="#444"/><circle cx="320" cy="170" r="14" fill="#444"/></svg>`,
+            mrt_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151a21"/><rect x="130" y="30" width="140" height="150" rx="25" fill="#005493"/><rect x="130" y="30" width="140" height="50" rx="15" fill="#003761"/><rect x="140" y="65" width="120" height="55" rx="10" fill="#111"/><rect x="148" y="72" width="48" height="40" fill="#a6d5fa" rx="4"/><rect x="204" y="72" width="48" height="40" fill="#a6d5fa" rx="4"/><rect x="145" y="140" width="25" height="10" fill="#ffeb3b" rx="2"/><rect x="230" y="140" width="25" height="10" fill="#ffeb3b" rx="2"/><circle cx="165" cy="175" r="12" fill="#333"/><circle cx="235" cy="175" r="12" fill="#333"/></svg>`,
+            mrt_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#151a21"/><rect x="10" y="55" width="380" height="105" rx="12" fill="#e0e0e0"/><rect x="10" y="55" width="380" height="18" fill="#005493"/><rect x="35" y="85" width="70" height="35" fill="#222" rx="4"/><rect x="120" y="85" width="70" height="35" fill="#222" rx="4"/><rect x="210" y="85" width="70" height="35" fill="#222" rx="4"/><circle cx="70" cy="170" r="13" fill="#222"/><circle cx="330" cy="170" r="13" fill="#222"/></svg>`,
+            lrt_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1a1c1e"/><rect x="135" y="35" width="130" height="145" rx="30" fill="#222"/><rect x="135" y="35" width="130" height="145" rx="30" stroke="#e61c24" stroke-width="6" fill="none"/><rect x="145" y="55" width="110" height="50" rx="15" fill="#4fc3f7"/><rect x="155" y="125" width="90" height="10" fill="#e61c24" rx="2"/><circle cx="170" cy="160" r="8" fill="#fff"/><circle cx="230" cy="160" r="8" fill="#fff"/></svg>`,
+            lrt_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1a1c1e"/><rect x="20" y="60" width="360" height="95" rx="15" fill="#333"/><rect x="20" y="60" width="360" height="15" fill="#e61c24"/><rect x="40" y="85" width="60" height="30" fill="#111" rx="5"/><rect x="115" y="85" width="80" height="30" fill="#111" rx="2"/><rect x="205" y="85" width="80" height="30" fill="#111" rx="2"/><circle cx="90" cy="165" r="12" fill="#555"/><circle cx="310" cy="165" r="12" fill="#555"/></svg>`,
+            tj_front: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1c2126"/><rect x="120" y="25" width="160" height="145" rx="15" fill="#00adef"/><rect x="120" y="110" width="160" height="10" fill="#fff"/><rect x="130" y="35" width="140" height="55" rx="5" fill="#111"/><rect x="140" y="42" width="120" height="35" fill="#81d4fa" rx="2"/><circle cx="150" cy="150" r="10" fill="#fff"/><circle cx="250" cy="150" r="10" fill="#fff"/><rect x="145" y="170" width="35" height="20" fill="#222"/><rect x="220" y="170" width="35" height="20" fill="#222"/></svg>`,
+            tj_side: `<svg viewBox="0 0 400 200" width="100%" height="100%"><rect width="400" height="200" fill="#1c2126"/><rect x="15" y="45" width="370" height="110" rx="10" fill="#00adef"/><rect x="15" y="115" width="370" height="12" fill="#fff"/><rect x="35" y="55" width="45" height="40" fill="#222" rx="3"/><rect x="90" y="55" width="65" height="40" fill="#222" rx="2"/><rect x="165" y="55" width="65" height="40" fill="#222" rx="2"/><rect x="240" y="55" width="65" height="40" fill="#222" rx="2"/><circle cx="90" cy="165" r="18" fill="#111"/><circle cx="90" cy="165" r="8" fill="#777"/><circle cx="310" cy="165" r="18" fill="#111"/><circle cx="310" cy="165" r="8" fill="#777"/></svg>`
+        };
+
         const transportDatabase = {
             krl: {
                 title: "KRL Commuter Line",
-                sub: "PT KAI COMMUTER · JABODETABEK & JOGJA-SOLO",
+                sub: "PT KAI COMMUTER · JABODETABEK DIVISION",
                 theme: "theme-krl",
-                history: "Kereta Rel Listrik (KRL) pertama kali beroperasi di Indonesia di jalur Batavia (Jakarta) menuju Bogor pada tahun 1925 pada masa kolonial Belanda. Modernisasi massal dimulai pada dekade 2000-an dengan mendatangkan unit hibah andal dari Jepang seperti JR 205 Series, Tokyo Metro, dan Tokyu. Saat ini, Commuter Line merupakan tulang punggung transportasi megapolitan Jabodetabek yang mengangkut hingga seantero jutaan penumpang per harinya secara presisi.",
+                history: "Kereta Rel Listrik (KRL) pertama kali mengaspal di lintasan Batavia-Bogor pada tahun 1925. Modernisasi besar dilakukan di era 2000-an dengan mendatangkan rangkaian andal seri JR East 205 dari Jepang. Saat ini, KRL Commuter Line menjadi andalan utama transportasi publik yang menghubungkan area Bekasi dan Jakarta secara cepat dan efisien bagi jutaan pekerja lintas wilayah anglomerasi.",
                 specs: [
-                    { label: "Manufaktur Utama", val: "JR East, Tokyo Metro, CRRC Sifang" },
-                    { label: "Lebar Jalur (Gauge)", val: "1.067 mm" },
-                    { label: "Sistem Kelistrikan", val: "1.500 V DC Overhead Catenary" },
-                    { label: "Kecepatan Maksimum", val: "90 - 100 km/jam" }
+                    { label: "Manufaktur Utama", val: "JR East 205, CRRC Sifang" },
+                    { label: "Lebar Rel (Gauge)", val: "1.067 mm" },
+                    { label: "Sistem Listrik", val: "1.500 V DC LAA" },
+                    { label: "Formasi Kereta", val: "8 / 10 / 12 Kereta (SF)" }
                 ],
-                images: [
-                    "https://images.unsplash.com/photo-1560930968-31f759a87577?auto=format&fit=crop&w=800&q=80", // JR205 Tokyo Style
-                    "https://images.unsplash.com/photo-1549488497-23696b0ca8ba?auto=format&fit=crop&w=800&q=80", // Train Station Peron
-                    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80"  // Night Transit Track
-                ]
+                vectors: [svgStorage.krl_front, svgStorage.krl_side]
             },
             mrt: {
-                title: "MRT Jakarta",
-                sub: "PT MRT JAKARTA · JALUR UTARA-SELATAN PHASE 1",
+                title: "MRT Jakarta (Ratangga)",
+                sub: "PT MRT JAKARTA · JALUR UTARA-SELATAN",
                 theme: "theme-mrt",
-                history: "Mass Rapid Transit (MRT) Jakarta atau 'Ratangga' resmi diluncurkan secara komersial pada 24 Maret 2019, menandai era baru sistem transportasi bawah tanah dan layang berstandar internasional pertama di Indonesia. Fase 1 membentang sepanjang 15,7 km menghubungkan Lebak Bulus hingga Bundaran HI. Proyek ini menggunakan sistem persinyalan canggih CBTC serta rangkaian kereta buatan pabrikan ternama asal Jepang.",
+                history: "Mass Rapid Transit (MRT) Jakarta dengan sebutan khusus 'Ratangga' resmi beroperasi penuh pada Maret 2019. Menjadi sistem kereta bawah tanah (underground) pertama di Indonesia yang menghubungkan Lebak Bulus hingga Bundaran HI sepanjang 15.7 km. MRT Jakarta terkenal dengan presisi ketepatan waktu kedatangan kereta (headway) yang mencapai nyaris 100%.",
                 specs: [
                     { label: "Pabrikan Kereta", val: "Nippon Sharyo, Jepang" },
-                    { label: "Formasi Rangkaian", val: "6 Kereta per Rangkaian" },
-                    { label: "Sistem Otomatisasi", val: "ATO (Automatic Train Operation)" },
-                    { label: "Kedalaman Maksimum", val: "± 19 Meter di bawah tanah" }
+                    { label: "Sistem Sinyal", val: "CBTC (Otomatisasi)" },
+                    { label: "Daya Jalur", val: "1.500 V DC LAA" },
+                    { label: "Kapasitas Maks", val: "1.950 Penumpang / Trip" }
                 ],
-                images: [
-                    "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=800&q=80", // Modern Metro Look
-                    "https://images.unsplash.com/photo-1555854816-79b7f8442974?auto=format&fit=crop&w=800&q=80", // Subway Platform Line
-                    "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80"  // High speed tunnel
-                ]
+                vectors: [svgStorage.mrt_front, svgStorage.mrt_side]
             },
             lrt: {
-                title: "LRT Jabodebek / Jakarta",
-                sub: "PT KAI / PT JAKPRO · SISTEM TRANSIT RINGAN",
+                title: "LRT Jabodebek",
+                sub: "PT KERETA API INDONESIA · DRIVERLESS SYSTEM",
                 theme: "theme-lrt",
-                history: "Light Rail Transit (LRT) hadir di Indonesia sebagai alternatif pemecah kemacetan di koridor satelit Jabodebek dan koridor internal Jakarta. Berbeda dengan KRL, sistem LRT Jabodebek mengadopsi teknologi mutakhir driverless tanpa masinis menggunakan sistem persinyalan GoA 3. Unit armada diproduksi secara lokal oleh PT INKA di Madiun, membuktikan kemandirian industri manufaktur rel nasional.",
+                history: "Light Rail Transit (LRT) Jabodebek melayani mobilitas masyarakat urban penyangga ibu kota dari Bekasi Timur dan Cibubur langsung menuju pusat kota Jakarta via jalur layang (elevated). Keunggulan utama sistem LRT Jabodebek adalah adopsi teknologi persinyalan tingkat tinggi tanpa masinis yang dikendalikan penuh dari Pusat Kendali Operasi (OCC).",
                 specs: [
-                    { label: "Produsen Unit", val: "PT INKA (Persero), Madiun" },
-                    { label: "Sistem Penggerak", val: "Third Rail (Rel Ketiga) 750V DC" },
-                    { label: "Otomatisasi Jalur", val: "GoA Level 3 (Driverless Train)" },
-                    { label: "Konstruksi Jalur", val: "Elevated (Layang) Struktur Kolom" }
+                    { label: "Produsen Unit", val: "PT INKA (Persero) Madiun" },
+                    { label: "Otomatisasi", val: "GoA Level 3 (Driverless)" },
+                    { label: "Sistem Power", val: "Third Rail (Rel Ketiga) 750V" },
+                    { label: "Struktur Jalur", val: "U-Shaped Girder Layang" }
                 ],
-                images: [
-                    "https://images.unsplash.com/photo-1532103054090-334e6e60ab29?auto=format&fit=crop&w=800&q=80", // Monorail Elevated Track Style
-                    "https://images.unsplash.com/photo-1568992687947-868a62a9f521?auto=format&fit=crop&w=800&q=80", // Clean Cyber Structure
-                    "https://images.unsplash.com/photo-1463780324318-d1a8ddc05a11?auto=format&fit=crop&w=800&q=80"  // Modern Station Exterior
-                ]
+                vectors: [svgStorage.lrt_front, svgStorage.lrt_side]
             },
             tj: {
                 title: "TransJakarta BRT",
-                sub: "PT TRANSPORTASI JAKARTA · SISTEM BRT TERPANJANG",
+                sub: "PT TRANSPORTASI JAKARTA · BUS RAPID TRANSIT",
                 theme: "theme-tj",
-                history: "Diresmikan pada 15 Januari 2004, TransJakarta memegang rekor sebagai sistem Bus Rapid Transit (BRT) dengan jalur lintasan terpanjang di dunia. Dirancang untuk memberikan layanan angkutan massal yang andal melalui sistem koridor khusus steril (busway). Memiliki armada bus gandeng (articulated) maupun single dengan standar emisi Euro 4 hingga inovasi elektrifikasi armada bus listrik ramah lingkungan saat ini.",
+                history: "Diluncurkan pertama kali pada Januari 2004, TransJakarta dirancang untuk memberikan layanan angkutan busway cepat di ibu kota. Hingga kini, TransJakarta dinobatkan sebagai sistem koridor bus cepat (BRT) terpanjang di dunia dengan rute terintegrasi mencakup bus gandeng (articulated bus), bus listrik ramah lingkungan, serta jaringan feeder Mikrotrans.",
                 specs: [
-                    { label: "Tipe Bus Utama", val: "Scania, Volvo, Mercedes-Benz, BYD" },
-                    { label: "Panjang Koridor Lintasan", val: "Lebih dari 250 km total sistem" },
-                    { label: "Model Halte", val: "High-Platform Ber-AC Terintegrasi" },
-                    { label: "Inovasi Terbaru", val: "Armada Bus Listrik Murni (EV)" }
+                    { label: "Merek Sasis Bus", val: "Scania, Volvo, BYD (Listrik)" },
+                    { label: "Panjang Jalur", val: "± 251.2 km Sistem Steril" },
+                    { label: "Tipe Lantai", val: "High Deck & Low Entry" },
+                    { label: "Sistem Integrasi", val: "Tap-In Tap-Out Terpusat" }
                 ],
-                images: [
-                    "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80", // City Red Bus Image
-                    "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80", // Bus Station Transit Lane
-                    "https://images.unsplash.com/photo-1562612176-04c632ff4691?auto=format&fit=crop&w=800&q=80"  // Urban Busway Lane View
-                ]
+                vectors: [svgStorage.tj_front, svgStorage.tj_side]
             }
         };
 
-        // KONTROL STATE MODAL SLIDESHOW
         let currentSlideIndex = 0;
-        let currentImagesArray = [];
+        let currentVectorsArray = [];
 
         function openTransportModal(key) {
             const data = transportDatabase[key];
             if (!data) return;
 
-            // Atur Konten Dasar
             document.getElementById('modalTitle').innerText = data.title;
             document.getElementById('modalSub').innerText = data.sub;
             document.getElementById('modalHistory').innerText = data.history;
 
-            // Atur Tema Warna Banner
             const banner = document.getElementById('modalBanner');
             banner.className = "modal-banner " + data.theme;
 
-            // Atur Spesifikasi Grid
             const specsGrid = document.getElementById('modalSpecs');
             specsGrid.innerHTML = "";
             data.specs.forEach(spec => {
@@ -710,23 +697,19 @@
                 `;
             });
 
-            // Set Up Array Gambar Slideshow
-            currentImagesArray = data.images;
+            currentVectorsArray = data.vectors;
             currentSlideIndex = 0;
             
-            const imgContainer = document.getElementById('slideImagesContainer');
-            imgContainer.innerHTML = "";
-            currentImagesArray.forEach((url, index) => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = data.title + " view";
-                img.className = `slide-img ${index === 0 ? 'active' : ''}`;
-                imgContainer.appendChild(img);
+            const vectorContainer = document.getElementById('slideVectorContainer');
+            vectorContainer.innerHTML = "";
+            currentVectorsArray.forEach((svgCode, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = `vector-slide ${index === 0 ? 'active' : ''}`;
+                wrapper.innerHTML = svgCode;
+                vectorContainer.appendChild(wrapper);
             });
 
             updateSlideCounter();
-
-            // Aktifkan Overlay Modal
             document.getElementById('transportModal').classList.add('active');
         }
 
@@ -735,17 +718,14 @@
         }
 
         function closeTransportModalOutside(e) {
-            if (e.target.id === 'transportModal') {
-                closeTransportModal();
-            }
+            if (e.target.id === 'transportModal') closeTransportModal();
         }
 
         function changeSlide(direction) {
-            const slides = document.querySelectorAll('.slide-img');
+            const slides = document.querySelectorAll('.vector-slide');
             if (slides.length === 0) return;
 
             slides[currentSlideIndex].classList.remove('active');
-            
             currentSlideIndex += direction;
             if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
             if (currentSlideIndex < 0) currentSlideIndex = slides.length - 1;
@@ -755,85 +735,47 @@
         }
 
         function updateSlideCounter() {
-            document.getElementById('slideCounter').innerText = `${currentSlideIndex + 1} / ${currentImagesArray.length}`;
+            document.getElementById('slideCounter').innerText = `${currentSlideIndex + 1} / ${currentVectorsArray.length}`;
         }
 
-
-        // ==========================================================================
-        // SCRIPT ANIMASI 3D TILT MURNI (TANPA LIBRARY EKSTERNAL)
-        // ==========================================================================
+        // TILT EFFECT YANG DIHALUSKAN (SPRING SENSATION)
         const cards = document.querySelectorAll('[data-tilt]');
-        
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
-                const cardRect = card.getBoundingClientRect();
-                const cardWidth = cardRect.width;
-                const cardHeight = cardRect.height;
-                
-                // Koordinat relatif kursor di dalam kartu (-0.5 sampai 0.5)
-                const mouseX = (e.clientX - cardRect.left) / cardWidth - 0.5;
-                const mouseY = (e.clientY - cardRect.top) / cardHeight - 0.5;
-                
-                // Set batas maksimum rotasi kemiringan (derajat)
-                const maxRotationX = 12; 
-                const maxRotationY = 12;
-                
-                const angleY = mouseX * maxRotationY;
-                const angleX = -mouseY * maxRotationX; // Negatif agar arah rotasi natural ke bawah/atas
-                
-                card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale3d(1.02, 1.02, 1.02)`;
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                // Menggunakan transisi 3D halus pas digerakin
+                card.style.transform = `perspective(1000px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale3d(1.015, 1.015, 1.015)`;
             });
-            
             card.addEventListener('mouseleave', () => {
-                // Balikkan posisi semula secara smooth
-                card.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-                card.style.transition = 'transform 0.5s ease';
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                card.style.transition = 'transform 0.5s var(--ease-smooth)';
             });
-            
             card.addEventListener('mouseenter', () => {
-                card.style.transition = 'transform 0.1s ease';
+                card.style.transition = 'transform 0.15s var(--ease-smooth)';
             });
         });
 
-
-        // ==========================================================================
-        // EFEK PARTIKEL KLIK - MAKIN FUN & HIDUP
-        // ==========================================================================
+        // BUBBLE BOOM KLIK PARTIKEL (ALUS)
         document.addEventListener('click', (e) => {
-            // Jangan memicu partikel jika mengklik tombol kontrol utama
             if (e.target.classList.contains('slide-nav') || e.target.classList.contains('btn-close-modal')) return;
-
-            const particleCount = 8;
-            const colors = ['#3e4e3e', '#bfaea7', '#1a4fa3', '#107c41', '#2ca5a5', '#dd4b3e'];
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'click-particle';
-                
-                // Koordinat awal klik
-                particle.style.left = e.clientX + 'px';
-                particle.style.top = e.clientY + 'px';
-                
-                // Atur warna acak dari palet
-                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Arah ledakan acak menggunakan CSS Variables
-                const angle = (i / particleCount) * Math.PI * 2 + (Math.random() * 0.4 - 0.2);
-                const distance = 40 + Math.random() * 40;
-                const x = Math.cos(angle) * distance + 'px';
-                const y = Math.sin(angle) * distance + 'px';
-                
-                particle.style.setProperty('--x', x);
-                particle.style.setProperty('--y', y);
-                
-                document.body.appendChild(particle);
-                
-                // Hapus elemen setelah animasi kelar
-                setTimeout(() => {
-                    particle.remove();
-                }, 800);
+            const count = 6;
+            const colors = ['#dd1c24', '#005493', '#00adef', '#3e4e3e'];
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'click-particle';
+                el.style.left = e.clientX + 'px';
+                el.style.top = e.clientY + 'px';
+                el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                const angle = (i / count) * Math.PI * 2;
+                const dist = 25 + Math.random() * 30;
+                el.style.setProperty('--x', Math.cos(angle) * dist + 'px');
+                el.style.setProperty('--y', Math.sin(angle) * dist + 'px');
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 650);
             }
         });
     </script>
 </body>
-</html>
+    </html>
